@@ -6,7 +6,7 @@
 	if (isset($_POST['dateend'])) {$dateEnd=$_POST['dateend'];}
 	if (isset($_POST['datestart'])) {$dateStart=$_POST['datestart'];}
 	if(isset($_GET['createdate'])) {$createDate=$_GET['createdate'];}
-	
+	if (isset($_POST['count'])) {$count=$_POST['count'];}
 ?>
 
 <!doctype html>
@@ -79,7 +79,93 @@
 		</div>
 	</header>
 	<main>
-		<?if ($createDate):?>
+		<?
+		$_SESSION['sessСountPage']=$count;
+		$sessСountPage=$_SESSION['sessСountPage'];
+		
+		?>
+		<?if ($sessСountPage):?>
+		<form action="../postnikov/my_orders.php" method="post">
+			<div class="container_form">
+				<label for="count">Выбирете отбор по колличеству строк.</label>
+				<select name="count" id="count" class="select">
+					<option value='5' selected>5 строк</option>
+					<option value='10'>10 строк</option>				
+				</select>
+				<button type='submit' class='btn'>пересчитать</button>
+			</div>
+			
+		</form>
+		<?
+		
+		$countPage=$sessСountPage;
+		
+		if ($_GET["page"]) {
+			$page = $_GET["page"];
+		} else {
+			$page = 1;
+		}
+		$idLogin=$_SESSION['pssessid'];
+		$getIdClient=mysqli_query($db, "SELECT id FROM ps_client WHERE idlogin = '$idLogin'");
+		$arrayIdClient=mysqli_fetch_array ($getIdClient);
+		$idClient=$arrayIdClient['id'];		
+		$allOrders = mysqli_query($db, "SELECT * FROM ps_order WHERE idclient = '$idClient'");
+		$numberAllOrders = mysqli_num_rows($allOrders);
+		$numPages = $numberAllOrders/$countPage;
+		$allPages = ceil($numPages);
+		$numberRow = $countPage * ($page - 1);
+		$pickRows = mysqli_query($db,"SELECT * FROM ps_order LIMIT $numberRow, $countPage");
+		$arrayPickRows = mysqli_fetch_array($pickRows);	    
+		do {
+			printf("Ваш заказ № %s от <a href='../postnikov/my_orders.php?createdate=%s'> %s</a></p>",$arrayPickRows['id'], $arrayPickRows['createdate'], $arrayPickRows['createdate']);
+			
+		}
+		while ($arrayPickRows = mysqli_fetch_array($pickRows));
+		  
+		if (isset($_GET["page"]) && ($_GET["page"]!=1)) {
+			echo "<a href='http://cp81961.tmweb.ru/postnikov/my_orders.php'>Первая</a>";
+		}
+		if (empty($_GET["page"])) {
+			$i = 2;
+			echo "1";
+		} else {
+			$i = 1;
+		}
+		if (isset($_GET["page"]) && ($_GET["page"] != 1) && ($_GET["page"] != 2)) {
+			$pageGet=$_GET["page"];
+			$backPage=$pageGet-1;
+			echo "<a href='http://cp81961.tmweb.ru/postnikov/my_orders.php?page=$backPage'> предыдущая </a>";
+		}		  
+		do {
+			if ($i == $_GET["page"]) {
+				echo $i;
+			} else {
+				echo "<a href='http://cp81961.tmweb.ru/postnikov/my_orders.php?page=$i'> $i </a>";
+			}
+			$i++;
+		} while ($i <= $allPages);
+		
+		if (isset($_GET["page"]) && ($_GET["page"] != $allPages) && ($_GET["page"] != ($allPages - 1)) ) {
+			
+			$nextPage=$pageGet+1;
+			echo "<a href='http://cp81961.tmweb.ru/postnikov/my_orders.php?page=$nextPage'> Следующая </a>";
+		}
+		if (empty($_GET["page"])) {
+			$pageGet=1;
+			$nextPage=$pageGet+1;
+			echo "<a href='http://cp81961.tmweb.ru/postnikov/my_orders.php?page=$nextPage'> Следующая </a>";
+		}
+		
+		
+		
+		if (isset($_GET["page"]) && ($_GET["page"]!=$allPages)) {
+			echo "<a href='http://cp81961.tmweb.ru/postnikov/my_orders.php?page=$allPages'> Последняя </a>";
+		}
+		if (empty($_GET["page"])) {
+			
+			echo "<a href='http://cp81961.tmweb.ru/postnikov/my_orders.php?page=$allPages'> Последняя </a>";
+		}?>
+		<?elseif ($createDate):?>
 		<?
 		$searchCountry=mysqli_query ($db, "SELECT * FROM ps_order_country WHERE createdate = '$createDate'")/* or die(mysql_error())*/;
 		$arraySearchCountry=mysqli_fetch_array($searchCountry);
@@ -108,6 +194,17 @@
 		
 		
 		<?elseif ($_SESSION['pssess']):?>
+		<form action="../postnikov/my_orders.php" method="post">
+			<div class="container_form">
+				<label for="count">Выбирити отбор по колличеству строк.</label>
+				<select name="count" id="count" class="select">
+					<option value='5' selected>5 строк</option>
+					<option value='10'>10 строк</option>				
+				</select>
+				<button type='submit' class='btn'>пересчитать</button>
+			</div>
+			
+		</form>
 		<?
 		
 		$countPage=5;
@@ -120,20 +217,16 @@
 		$idLogin=$_SESSION['pssessid'];
 		$getIdClient=mysqli_query($db, "SELECT id FROM ps_client WHERE idlogin = '$idLogin'");
 		$arrayIdClient=mysqli_fetch_array ($getIdClient);
-		$idClient=$arrayIdClient['id'];
-		echo 'id client = '.$idClient.'<br>';		
+		$idClient=$arrayIdClient['id'];		
 		$allOrders = mysqli_query($db, "SELECT * FROM ps_order WHERE idclient = '$idClient'");
 		$numberAllOrders = mysqli_num_rows($allOrders);
 		$numPages = $numberAllOrders/$countPage;
 		$allPages = ceil($numPages);
 		$numberRow = $countPage * ($page - 1);
 		$pickRows = mysqli_query($db,"SELECT * FROM ps_order LIMIT $numberRow, $countPage");
-		$arrayPickRows = mysqli_fetch_array($pickRows);
-		
-	    
-	    
+		$arrayPickRows = mysqli_fetch_array($pickRows);	    
 		do {
-			printf("Ваш заказ <a href='../postnikov/my_orders.php?createdate=%s'>от %s</a></p>", $arrayPickRows['createdate'], $arrayPickRows['createdate']);
+			printf("Ваш заказ № %s от <a href='../postnikov/my_orders.php?createdate=%s'> %s</a></p>",$arrayPickRows['id'], $arrayPickRows['createdate'], $arrayPickRows['createdate']);
 			
 		}
 		while ($arrayPickRows = mysqli_fetch_array($pickRows));
@@ -151,8 +244,7 @@
 			$pageGet=$_GET["page"];
 			$backPage=$pageGet-1;
 			echo "<a href='http://cp81961.tmweb.ru/postnikov/my_orders.php?page=$backPage'> предыдущая </a>";
-		}
-		  
+		}		  
 		do {
 			if ($i == $_GET["page"]) {
 				echo $i;
@@ -161,13 +253,28 @@
 			}
 			$i++;
 		} while ($i <= $allPages);
-		if (isset($_GET["page"]) && ($_GET["page"] != $allPages) && ($_GET["page"] != ($allPages - 1))) {
+		
+		if (isset($_GET["page"]) && ($_GET["page"] != $allPages) && ($_GET["page"] != ($allPages - 1)) ) {
+			
 			$nextPage=$pageGet+1;
 			echo "<a href='http://cp81961.tmweb.ru/postnikov/my_orders.php?page=$nextPage'> Следующая </a>";
 		}
+		if (empty($_GET["page"])) {
+			$pageGet=1;
+			$nextPage=$pageGet+1;
+			echo "<a href='http://cp81961.tmweb.ru/postnikov/my_orders.php?page=$nextPage'> Следующая </a>";
+		}
+		
+		
+		
 		if (isset($_GET["page"]) && ($_GET["page"]!=$allPages)) {
 			echo "<a href='http://cp81961.tmweb.ru/postnikov/my_orders.php?page=$allPages'> Последняя </a>";
 		}
+		if (empty($_GET["page"])) {
+			
+			echo "<a href='http://cp81961.tmweb.ru/postnikov/my_orders.php?page=$allPages'> Последняя </a>";
+		}
+		
 		/*$sessName=$_SESSION['pssess'];
 		$order=mysqli_query ($db, "SELECT id FROM ps_intake WHERE login = '$sessName'") or die(mysql_error());
 		$arrayOrder=mysqli_fetch_array($order);
@@ -190,18 +297,10 @@
 			} while ($arrayOrderClient=mysqli_fetch_array($orderClient));
 			} else {
 				echo "У Вас еще нет заявок на тур.";
-			} 
-			
-			
-		
-		
+			} 		
 		echo $userName."Ваши заявки".$idClient;
-		*/
-		
-		
-		
+		*/		
 		?>
-		
 		
 		<?else:?>
 		<?echo "вы не авторизованы!";?>
