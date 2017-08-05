@@ -1,0 +1,4 @@
+AuthType Basic
+AuthName admin
+AuthUserFile 		/home/c/cp81961/public_html/postnikov/admin/.htpasswd
+require valid-user
