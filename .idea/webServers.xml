@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="528a8170-2670-4eb9-93ae-ca6c52d03867" name="timeweb" url="http://vh70.timeweb.ru">
+        <fileTransfer host="vh70.timeweb.ru" port="21" rootFolder="/public_html/postnikov">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="21" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

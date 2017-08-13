@@ -27,23 +27,23 @@ if (isset($_POST['password'])) {$password=$_POST['password'];}
 							<li><a href="http://cp81961.tmweb.ru/postnikov/edit.php">редактирование клиента</a></li>
 							<li><a href="http://cp81961.tmweb.ru/postnikov/delete_client.php">удаление клиента</a></li>
 							<li><a href="http://cp81961.tmweb.ru/postnikov/mail.php">рассылка почты</a></li>
-							
+
 						</ul>
 					</li>
 					<li><a class="dropdown" href="#">клиентам</a>
 						<ul>
 							<li><a href="http://cp81961.tmweb.ru/postnikov/intake.php">регистрация</a></li>
-							<li><a href="http://cp81961.tmweb.ru/postnikov/order_tour.php">заказ тура</a></li>
+							<li><a href="http://cp81961.tmweb.ru/postnikov/new_order.php">заказ тура</a></li>
 						</ul>
 					<li><a href="#">контакты</a></li>
-					<li><a href="http://cp81961.tmweb.ru/postnikov/authorization.php">вход для клиентов</a></li>		
+					<li><a href="http://cp81961.tmweb.ru/postnikov/authorization.php">вход для клиентов</a></li>
 				</ul>
-				
+
 			</nav>
 			<div class="cabinet">
 				<?
 				$_SESSION['pssess']=$login;
-				
+
 				$sessName=$_SESSION['pssess'];
 				$checkLogin=mysqli_query ($db, "SELECT id FROM ps_intake WHERE login = '$sessName'") or die(mysql_error());
 				$arrayCheckLogin=mysqli_fetch_array($checkLogin);
@@ -56,14 +56,14 @@ if (isset($_POST['password'])) {$password=$_POST['password'];}
 				echo $idLogin;
 				?>
 				<?if ($exit):?>
-					<? 
+					<?
 					session_unset();
 					session_destroy();
 					?>
 					<h5>вы вышли из аккаунта</h5>
 					<a href="http://cp81961.tmweb.ru/postnikov/authorization.php">Авторизуйтесь</a>
 					<a href="http://cp81961.tmweb.ru/postnikov/intake.php">Зарегистрируйтесь</a>
-					
+
 				<?elseif ($sessName && $cookie):?>
 					<h5><?=$userName?>, ваш логин <?=$sessName?></h5>
 					<a href="http://cp81961.tmweb.ru/postnikov/my_orders.php">мои заказы</a>
@@ -72,7 +72,7 @@ if (isset($_POST['password'])) {$password=$_POST['password'];}
 							<button type="submit" value="exit" name="exit">выйти</button>
 						</form>
 				<?elseif (!$cookie):?>
-					<? 
+					<?
 					session_unset();
 					session_destroy();
 					?>
@@ -84,7 +84,7 @@ if (isset($_POST['password'])) {$password=$_POST['password'];}
 					<a href="http://cp81961.tmweb.ru/postnikov/authorization.php">Авторизуйтесь</a>
 					<a href="http://cp81961.tmweb.ru/postnikov/intake.php">Зарегистрируйтесь</a>
 				<?endif?>
-					
+
 			</div>
 		</div>
 	</header>
