@@ -13,7 +13,7 @@ if (isset($_POST['dateend'])) {$dateEnd=$_POST['dateend'];}
 if (isset($_POST['datestart'])) {$dateStart=$_POST['datestart'];}
 if(isset($_GET['createdate'])) {$createDate=$_GET['createdate'];}
 if (isset($_POST['count'])) {$count=$_POST['count'];}
-
+if(isset($_POST['number_people'])) {$number_people=$_POST['number_people'];}
 ?>
 <!doctype html>
 <html lang="ru">
@@ -28,6 +28,16 @@ if (isset($_POST['count'])) {$count=$_POST['count'];}
 <?
 if ($sessName && $id && $country && $dateStart && $dateEnd):?>
     <?
+
+    $arrayOrder=mysqli_query($db, "INSERT INTO ps_order (idclient, datestart, dateend, createdate) VALUES ('$id','$dateStart','$dateEnd',(NOW()))");
+    $idOrder1 = mysqli_insert_id($db);
+    $sunString=count($country);
+    $i=0;
+    do {
+        $arrayCountry=mysqli_query($db, "INSERT INTO ps_order_country (idclient, idcountry, idorder, num_people, createdate) VALUES ('$id','$country[$i]', '$idOrder1', '$number_people', (NOW()))");
+        $i++;
+    } while ($i<$sunString);
+
     $keyCountry=1;
     foreach ($country as $valueCountry) {
         $CountryList->{$keyCountry}=$valueCountry;
@@ -35,18 +45,12 @@ if ($sessName && $id && $country && $dateStart && $dateEnd):?>
     }
     $jsonCountryList=json_encode($CountryList);
 
-    $recOrder=mysqli_query($db, "INSERT INTO ps_new_order (idclient, countrys, datestart, dateend, createdate) VALUES ('$id','$jsonCountryList','$dateStart','$dateEnd',(NOW()))");
+    $recOrder=mysqli_query($db, "INSERT INTO ps_new_order (idclient, countrys, datestart, dateend, createdate) VALUES ('$id','$jsonCountryList','$dateStart','$dateEnd', (NOW()))");
     $idOrder=mysqli_insert_id($db);
 
    if ($recOrder==true)
    {
-
-
-
-
-    echo '<h4>Ваш заказ принят!</h4>'.'<br>'.'Номер заказа - '.$idOrder.'<br> дата начала тура - '.$dateStart.'<br> дата конца тура - '.$dateEnd.'<br>Выбранные страны: ';
-
-    $readOrder=mysqli_query ($db, "SELECT 	countrys FROM ps_new_order WHERE id = '$idOrder'") or die(mysql_error());
+    echo '<h4>Ваш заказ принят!</h4>'.'<br>'.'Номер заказа - '.$idOrder.'<br> дата начала тура - '.$dateStart.'<br> дата конца тура - '.$dateEnd.'<br>Выбранные страны: ';$readOrder=mysqli_query ($db, "SELECT 	countrys FROM ps_new_order WHERE id = '$idOrder'") or die(mysql_error());
     $arrayReadOrder=mysqli_fetch_array($readOrder);
     $jsonReadCountryList=$arrayReadOrder['countrys'];
     $listCountry=json_decode($jsonReadCountryList);
@@ -133,6 +137,20 @@ if ($sessName && $id && $country && $dateStart && $dateEnd):?>
         <div class="container_form">
             <label for="dateend">конец тура</label>
             <input type="date" name="dateend" class="mini_textarea" id="dateend"  placeholder="20.06.2010">
+        </div>
+        <div class="country_form">
+            <p>Колличество человек</p>
+            <input type="radio" name="number_people" id="number1" value="1" checked>
+            <label for="number1"> - 1  </label>
+            <input type="radio" name="number_people" id="number2"  value="2">
+            <label for="number2"> - 2  </label>
+            <input type="radio" name="number_people" id="number3"  value="3">
+            <label for="number3"> - 3  </label>
+            <input type="radio" name="number_people" id="number4"  value="4">
+            <label for="number3"> - 4  </label>
+            <input type="radio" name="number_people" id="number5"  value="5">
+            <label for="number3"> - 5  </label>
+
         </div>
         <div class="container_form">
             <p>выберете страну</p><br>

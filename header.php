@@ -15,7 +15,8 @@ include ("../postnikov/admin/db.php");
 							<li><a href="http://cp81961.tmweb.ru/postnikov/edit.php">редактирование клиента</a></li>
 							<li><a href="http://cp81961.tmweb.ru/postnikov/delete_client.php">удаление клиента</a></li>
 							<li><a href="http://cp81961.tmweb.ru/postnikov/mail.php">рассылка почты</a></li>
-							
+							<li><a href="http://cp81961.tmweb.ru/postnikov/view_orders_customer.php">просмотр заказов клиентов</a></li>
+
 						</ul>
 					</li>
 					<li><a class="dropdown" href="#">клиентам</a>

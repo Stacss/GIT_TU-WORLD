@@ -23,13 +23,9 @@
 		<?
 		$arrayOrder=mysqli_query($db, "INSERT INTO ps_order (idclient, datestart, dateend, createdate) VALUES ('$id','$dateStart','$dateEnd',(NOW()))");
 		$idOrder = mysqli_insert_id($db);
-				
 		$sunString=count($country);
 		$i=0;
 		do {
-		
-		
-		
 		$arrayCountry=mysqli_query($db, "INSERT INTO ps_order_country (idclient, idcountry, idorder, createdate) VALUES ('$id','$country[$i]', '$idOrder', (NOW()))");
 			if ($arrayOrder==true && $arrayCountry==true) {
 				echo '<br>данные в таблицы занесены';
