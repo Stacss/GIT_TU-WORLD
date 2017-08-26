@@ -471,8 +471,28 @@ h4,
 h1 {
 	text-transform: uppercase;
 }
-h2, input {
-	display: inline-block;
+h1{
+    text-align: left;
+    display: block;
+    margin-left: 250px;
+}
+header h2 {
+    text-align: left;
+    display: block;
+    margin-left: 250px;
+}
+input {
+	display: block;
+    margin-left: 55px;
+}
+a {
+    line-height: 2.2;
+    font-weight: 500;
+    text-transform: uppercase;
+    text-decoration: none;
+}
+.general a{
+    display: block;
 }
 .mini_textarea {
 	width: 360px;
@@ -518,13 +538,6 @@ h2, input {
 	border: 2px solid #000000;
 	color: #505050;
 }
-
-.container_form
-p,
-input,
-label {
-	display: inline-block;
-}
 .container_form {
 	display: block;
 	width: 1000px;
@@ -541,34 +554,6 @@ label {
 .container_form + input {
 	padding-left: 100px;
 }
-.container_form:nth-child(4)>label {
-    margin-right: 74px;
-}
-.container_form:nth-child(2)>label {
-    margin-right: 76px;
-}
-.container_form:nth-child(3)>label {
-    margin-right: 121px;
-}
-.container_form:nth-child(5)>p {
-    margin-right: 125px;
-}
-.container_form:nth-child(6)>label {
-    margin-right: 23px;
-}
-.country_form:nth-child(3)>label {
-    margin-right: 26px;
-}
-.country_form:nth-child(2)>label {
-    margin-right: 23px;
-}
-.container_form:nth-child(5)>label {
-    margin-right: 103px;
-}
-.container_form:nth-child(8)>label {
-    margin-right: 103px;
-}
-
 .btn {
 	display: block;
 	width: 215px;
@@ -599,9 +584,15 @@ label {
     content:"";
     display:table;
 }
+.logo {
+    width: 120px;
+    height: 120px;
+    float: left;
+    margin: 20px 0 0 20px;
+
+}
 nav {
-	float: left;
-	width: 70%;
+    margin: 0 auto;
 }
 nav ul {
 	-webkit-font-smoothing:antialiased;
@@ -613,11 +604,10 @@ nav ul {
     width: 100%;
 }
 nav li {
-    float: left;
+    display: inline-block;
     margin: 0;
     padding: 0;
     position: relative;
-    min-width: 25%;
 }
 nav a {
     background: #ddd;
@@ -683,10 +673,17 @@ nav li ul a:hover {
     zoom:1;
 }
 .cabinet {
-	float: right;
-	width: 30%;
-	background-color: #E6E6FA;
+    padding: 20px;
+    margin-top: 60px;
+	width: 97%;
+	background-color: #ddd;
+    border-bottom: 2px solid black;
+}
+.cabinet h5, a {
+    display: inline-block;
 }
 .cabinet a {
-	display: block;
+    text-decoration: none;
+    -ms-text-align-last: right;
+    text-align: left;
 }

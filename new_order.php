@@ -106,30 +106,9 @@ if ($sessName && $id && $country && $dateStart && $dateEnd):?>
    }?>
 
 <?elseif ($sessName):?>
-    <?="ВСЕ ОК";?>
     <form method='post' action='new_order.php'>
-        <div class="container_form">
-            <label for="id_client">выбирете фио</label>
-            <select name="id" class="select" id="id_client">
-
-                <?
-                $sessName=$_SESSION['pssess'];
-                $checkLogin=mysqli_query ($db, "SELECT id FROM ps_intake WHERE login = '$sessName'") or die(mysql_error());
-                $arrayCheckLogin=mysqli_fetch_array($checkLogin);
-                $idLogin=$arrayCheckLogin['id'];
-                $checkName=mysqli_query ($db, "SELECT * FROM ps_client WHERE idlogin = '$idLogin'") or die(mysql_error());
-                $arrayCheckName=mysqli_fetch_array($checkName);
-
-
-
-
-                do{
-                    printf ("<option value='%s' selected>%s %s %s</option>", $arrayCheckName['id'],$arrayCheckName['surname'],$arrayCheckName['name'],$arrayCheckName['patronymic']);
-                } while ($arrayCheckName=mysqli_fetch_array($checkName));
-
-                ?>
-            </select>
-        </div>
+            <input type="hidden" name="id" class="select" id="id_client" value="<?echo $_SESSION['psIdClient'];?>">
+            </input>
         <div class="container_form">
             <label for="datestart">начало тура</label>
             <input type="date" name="datestart" class="mini_textarea" id="datestart"  placeholder="10.06.2010">

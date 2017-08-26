@@ -17,67 +17,7 @@
 	<title>TU-WORLD</title>
 </head>
 <body>
-		<header>
-		<h1>tu-world</h1>
-		<h2>туристическое агенство</h2>
-		<div class="container_nav">
-			<nav>
-				<ul class="cf">
-					<li><a href="http://cp81961.tmweb.ru/postnikov/index.php">главная</a></li>
-					<li><a class="dropdown" href="#">администрирование</a>
-						<ul>
-							<li><a href="http://cp81961.tmweb.ru/postnikov/country.php">ввод стран</a></li>
-							<li><a href="http://cp81961.tmweb.ru/postnikov/edit.php">редактирование клиента</a></li>
-							<li><a href="http://cp81961.tmweb.ru/postnikov/delete_client.php">удаление клиента</a></li>
-							<li><a href="http://cp81961.tmweb.ru/postnikov/mail.php">рассылка почты</a></li>
-							
-						</ul>
-					</li>
-					<li><a class="dropdown" href="#">клиентам</a>
-						<ul>
-							<li><a href="http://cp81961.tmweb.ru/postnikov/intake.php">регистрация</a></li>
-							<li><a href="http://cp81961.tmweb.ru/postnikov/order_tour.php">заказ тура</a></li>
-						</ul>
-					<li><a href="#">контакты</a></li>
-					<li><a href="http://cp81961.tmweb.ru/postnikov/authorization.php">вход для клиентов</a></li>		
-				</ul>
-				
-			</nav>
-			<div class="cabinet">
-				<?
-				$sessName=$_SESSION['pssess'];
-				$checkLogin=mysqli_query ($db, "SELECT id FROM ps_intake WHERE login = '$sessName'") or die(mysql_error());
-				$arrayCheckLogin=mysqli_fetch_array($checkLogin);
-				$idLogin=$arrayCheckLogin['id'];
-				$checkName=mysqli_query ($db, "SELECT name FROM ps_client WHERE idlogin = '$idLogin'") or die(mysql_error());
-				$arrayCheckName=mysqli_fetch_array($checkName);
-				$userName=$arrayCheckName['name'];?>
-				<?if ($exit):?>
-					<? 
-					session_unset();
-					session_destroy();
-					?>
-					<h5>вы вышли из аккаунта</h5>
-					<a href="http://cp81961.tmweb.ru/postnikov/authorization.php">Авторизуйтесь</a>
-					<a href="http://cp81961.tmweb.ru/postnikov/intake.php">Зарегистрируйтесь</a>
-					
-				<?elseif ($sessName):?>
-					<h5><?=$userName?>, ваш логин <?=$sessName?></h5>
-					<a href="http://cp81961.tmweb.ru/postnikov/my_orders.php">мои заказы</a>
-					<a href="#">мои данные</a>
-						<form action="../postnikov/index.php" method="post">
-							<button type="submit" value="exit" name="exit">выйти</button>
-						</form>
-				
-				<?else:?>
-							<h5>Здравствуйте, Гость!</h5>
-					<a href="http://cp81961.tmweb.ru/postnikov/authorization.php">Авторизуйтесь</a>
-					<a href="http://cp81961.tmweb.ru/postnikov/intake.php">Зарегистрируйтесь</a>
-				<?endif?>
-					
-			</div>
-		</div>
-	</header>
+		<?include ("../postnikov/header.php");?>
 	<main>
 		<?
 		$_SESSION['sessСountPage']=$count;
@@ -167,6 +107,28 @@
 		}?>
 		<?elseif ($createDate):?>
 		<?
+           /* function day ($a, $b) {
+                $run=explode('-',$a);
+                $yearRun=$run[1];
+                $monthRun=$run[2];
+                $dayRun=$run{3};
+                $end= explode('-,$b');
+                $yearEnd=$end[1];
+                $monthEnd=$end[2];
+                $dayEnd=$end{3};
+                $year=$yearEnd-$yearRun;
+                $month=$monthEnd-$monthRun;
+                if ($month<0) {
+                    $year=$year-1;
+                    $monthEnd=$monthEnd+12;
+                    $month=$monthEnd-$monthRun;
+                };
+                $day=$dayEnd-$dayRun;
+                if ($day<0) {
+
+                }
+
+            }*/
 		$searchCountry=mysqli_query ($db, "SELECT * FROM ps_order_country WHERE createdate = '$createDate'")/* or die(mysql_error())*/;
 		$arraySearchCountry=mysqli_fetch_array($searchCountry);
 		$searchDate=mysqli_query ($db, "SELECT * FROM ps_order WHERE createdate = '$createDate'")/* or die(mysql_error())*/;
@@ -174,8 +136,12 @@
 		
 		do{
 			printf("Дата начала тура %s<br>Дата конца тура %s<br>", $arraySearchDate['datestart'], $arraySearchDate['dateend']);
+
 		} while ($arraySearchDate=mysqli_fetch_array($searchDate));
-		
+            $run=$arraySearchDate['datestart'];
+            $end=$arraySearchDate['dateend'];
+            $interval = date_diff($run, $end);
+            echo ($interval->format('%R%a дней'));
 		
 		echo "Выбранная страна(ы):<br>";
 		
@@ -206,7 +172,7 @@
 			
 		</form>
 		<?
-		
+
 		$countPage=5;
 		
 		if ($_GET["page"]) {
